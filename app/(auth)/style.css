@@ -1,0 +1,23 @@
+@tailwind components;
+
+@layer components {
+  .wrapper {
+    @apply relative my-4;
+  }
+
+  .wrapper__input {
+    @apply py-2 pl-8 w-full outline-none ring-0 rounded-md h-fit border  focus:ring-0  transition-all duration-300 placeholder-gray-400;
+  }
+
+  .wrapper__label {
+    @apply absolute inset-y-0 h-full flex items-center left-2 transition-all duration-300;
+  }
+
+  .wrapper__label-eye {
+    @apply absolute right-2 inset-y-0 flex items-center text-gray-400 peer-focus:text-gray-700 transition-all duration-300 cursor-pointer;
+  }
+
+  .wrapper__button {
+    @apply w-full py-2.5 px-2 rounded-md bg-red-500 text-white font-medium text-sm mt-7 transition-all duration-300 hover:bg-red-600;
+  }
+}

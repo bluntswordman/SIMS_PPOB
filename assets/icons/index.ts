@@ -1,0 +1,13 @@
+export { default as Game } from "./Game.png";
+export { default as Kurban } from "./Kurban.png";
+export { default as Listrik } from "./Listrik.png";
+export { default as Logo } from "./Logo.png";
+export { default as Musik } from "./Musik.png";
+export { default as PBB } from "./PBB.png";
+export { default as PDAM } from "./PDAM.png";
+export { default as PGN } from "./PGN.png";
+export { default as PaketData } from "./Paket-Data.png";
+export { default as Pulsa } from "./Pulsa.png";
+export { default as Televisi } from "./Televisi.png";
+export { default as VoucherMakan } from "./Voucher-Makanan.png";
+export { default as Zakat } from "./Zakat.png";
