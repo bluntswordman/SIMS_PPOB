@@ -1,78 +1,7 @@
 import Image from "next/image";
 
-import {
-  Game,
-  Kurban,
-  Listrik,
-  Musik,
-  PBB,
-  PDAM,
-  PGN,
-  PaketData,
-  Pulsa,
-  Televisi,
-  VoucherMakan,
-  Zakat,
-} from "@/assets/icons";
 import { BackgroundSaldo } from "@/assets/images";
-import {
-  CheckSaldo,
-  LIstPromo,
-  Profile,
-  Banner,
-  ListService,
-} from "@user/_components";
-
-const FEATURES = [
-  {
-    title: "PBB",
-    icon: PBB,
-  },
-  {
-    title: "Listrik",
-    icon: Listrik,
-  },
-  {
-    title: "Pulsa",
-    icon: Pulsa,
-  },
-  {
-    title: "PDAM",
-    icon: PDAM,
-  },
-  {
-    title: "PGN",
-    icon: PGN,
-  },
-  {
-    title: "TV Langganan",
-    icon: Televisi,
-  },
-  {
-    title: "Musik",
-    icon: Musik,
-  },
-  {
-    title: "Voucher Game",
-    icon: Game,
-  },
-  {
-    title: "Voucher Makan",
-    icon: VoucherMakan,
-  },
-  {
-    title: "Kurban",
-    icon: Kurban,
-  },
-  {
-    title: "Zakat",
-    icon: Zakat,
-  },
-  {
-    title: "Paket Data",
-    icon: PaketData,
-  },
-];
+import { Banner, CheckSaldo, ListService, Profile } from "@user/_components";
 
 export default function DashboardPage() {
   return (
@@ -108,5 +37,3 @@ export default function DashboardPage() {
     </main>
   );
 }
-
-// export default HomePage;
