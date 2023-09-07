@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import { Header } from "@user/_components";
-import { SessionProvider, QueryProvider } from "@global/components/fragments";
+import {
+  SessionProvider,
+  QueryProvider,
+  ReduxProvider,
+} from "@global/components/fragments";
 
 import "@global/styles/globals.css";
 
@@ -22,10 +26,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider>
-          <QueryProvider>
-            <Header />
-            {children}
-          </QueryProvider>
+          <ReduxProvider>
+            <QueryProvider>
+              <Header />
+              {children}
+            </QueryProvider>
+          </ReduxProvider>
         </SessionProvider>
       </body>
     </html>

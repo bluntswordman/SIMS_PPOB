@@ -2,7 +2,7 @@
 
 import { ChangeEvent, FC, ReactNode } from "react";
 
-interface InputTextProps {
+interface InputGroupProps {
   label?: ReactNode | string;
   leftIcon?: ReactNode | string;
   rightIcon?: ReactNode | string;
@@ -20,7 +20,7 @@ interface InputTextProps {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputText: FC<InputTextProps> = ({
+const InputGroup: FC<InputGroupProps> = ({
   id,
   name,
   value,
@@ -102,4 +102,4 @@ const InputText: FC<InputTextProps> = ({
   );
 };
 
-export default InputText;
+export default InputGroup;

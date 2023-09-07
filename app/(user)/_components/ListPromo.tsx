@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { FC } from "react";
+import { Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Mousewheel, Pagination } from "swiper/modules";
 
 import {
   BannerFive,

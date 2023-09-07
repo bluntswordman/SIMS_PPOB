@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import { SessionProvider } from "@global/components/fragments";
+import {
+  QueryProvider,
+  SessionProvider,
+  ReduxProvider,
+} from "@global/components/fragments";
 
 import "@auth/style.css";
 import "@global/styles/globals.css";
@@ -21,7 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </SessionProvider>
       </body>
     </html>
   );

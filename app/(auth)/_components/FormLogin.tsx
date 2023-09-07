@@ -1,7 +1,8 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { FormEvent, useCallback, useState } from "react";
 import {
   AiOutlineClose,
   AiOutlineEye,
@@ -9,27 +10,19 @@ import {
 } from "react-icons/ai";
 import { FiAtSign } from "react-icons/fi";
 import { MdLockOutline } from "react-icons/md";
-import { useRouter } from "next/navigation";
 
-import { InputText } from "@global/components/elements";
+import type { IError, IFormLogin } from "@/types/auth";
+import { InputGroup } from "@global/components/elements";
 import { useForm } from "@global/hooks";
-
-interface IFormLogin {
-  email: string;
-  password: string;
-}
-
-interface IEyes {
-  password: boolean;
-}
 
 const FormLogin = () => {
   const router = useRouter();
 
-  const [eyes, setEyes] = useState<IEyes>({
+  const [eyes, setEyes] = useState({
     password: false,
   });
-  const [error, setError] = useState({
+
+  const [error, setError] = useState<IError>({
     status: false,
     message: "",
   });
@@ -39,38 +32,40 @@ const FormLogin = () => {
     password: "",
   });
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const { email, password } = values;
+  const handleSubmit = useCallback(
+    async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const { email, password } = values;
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-      callbackUrl: "/dashboard",
-    });
-
-    if (result?.error && result.error.length >= 1) {
-      setError({
-        status: true,
-        message: "password yang anda masukan asalah",
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
       });
 
-      setTimeout(() => {
+      if (result?.error && result.error.length >= 1) {
         setError({
-          status: false,
-          message: "",
+          status: true,
+          message: "password yang anda masukan asalah",
         });
-      }, 2000);
-    } else {
-      router.push("/dashboard");
-    }
-  };
+
+        setTimeout(() => {
+          setError({
+            status: false,
+            message: "",
+          });
+        }, 3000);
+      } else {
+        router.push("/dashboard");
+      }
+    },
+    [router, values]
+  );
 
   return (
     <form className="flex flex-col w-[70%] space-y-10" onSubmit={handleSubmit}>
       <div className="flex flex-col space-y-5">
-        <InputText
+        <InputGroup
           required
           name="email"
           type="email"
@@ -80,7 +75,7 @@ const FormLogin = () => {
           value={values.email}
           onChange={handleChange}
         />
-        <InputText
+        <InputGroup
           required
           autoComplete="off"
           type={eyes.password ? "text" : "password"}
@@ -111,7 +106,8 @@ const FormLogin = () => {
       </div>
       <button
         type="submit"
-        className="w-full py-2.5 px-2 rounded-md bg-red-500 text-white font-medium text-sm mt-7 transition-all duration-300 hover:bg-red-600"
+        disabled={values.email.length < 1 || values.password.length < 1}
+        className="btn-solid-primary"
       >
         Masuk
       </button>
