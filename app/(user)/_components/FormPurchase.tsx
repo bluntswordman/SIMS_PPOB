@@ -7,7 +7,7 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { MdOutlinePayment } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Logo } from "@/assets/icons";
+import { Logo } from "@global/assets/icons";
 import { InputGroup } from "@global/components/elements";
 import { Modal } from "@global/components/fragments";
 import { useForm } from "@global/hooks";
@@ -16,6 +16,7 @@ import { AppDispatch, RootState } from "@global/store";
 import { getBalanceAccount } from "@global/store/features/balanceSlice";
 import { getServicesBySlugModule } from "@global/store/features/moduleSlice";
 import { addTransactionModule } from "@global/store/features/transactionSlice";
+
 import type { INotification } from "@global/types/auth";
 
 interface FormPurchaseProps {
@@ -37,11 +38,13 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
   const { data: session } = useSession();
   const axios = useAxios();
   const { service, loading } = useSelector((state: RootState) => state.module);
+  const { data: balance } = useSelector((state: RootState) => state.balance);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (session?.token) {
       dispatch(getServicesBySlugModule(slug));
+      dispatch(getBalanceAccount());
     }
   }, [session?.token, dispatch, axios, slug]);
 
@@ -63,20 +66,21 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
         dispatch(addTransactionModule(service.service_code))
           .unwrap()
           .then((res) => {
-            console.log(res);
             if (res.data) {
               dispatch(getBalanceAccount());
               setShowForm(false);
-              setShowNotification(true);
               setNotification({
                 message: "Berhasil",
                 type: "success",
               });
+              setShowNotification(true);
             } else {
+              setShowForm(false);
               setNotification({
-                message: "Gagal",
+                message: res.message,
                 type: "error",
               });
+              setShowNotification(true);
             }
           });
       }
@@ -126,7 +130,9 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
         />
         <button
           type="button"
-          disabled={loading || values.cash === 0}
+          disabled={
+            loading || values.cash === 0 || balance.balance < values.cash
+          }
           onClick={() => setShowForm(true)}
           className="btn-solid-primary"
         >
