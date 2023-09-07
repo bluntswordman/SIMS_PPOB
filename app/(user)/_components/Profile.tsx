@@ -15,7 +15,7 @@ const Profile = () => {
   const { data: session } = useSession();
   const axios = useAxios();
 
-  const { data, status } = useSelector((state: RootState) => state.user);
+  const { data, loading } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -41,8 +41,8 @@ const Profile = () => {
       />
       <div className="flex flex-col space-y-0">
         <p className="font-light text-base">Selamat datang,</p>
-        {status === "loading" ? (
-          <p className="font-bold text-3xl">Loading...</p>
+        {loading || data?.first_name === undefined ? (
+          <div className="w-full h-8 rounded-lg bg-gray-200 animate-pulse animate-infinite animate-duration-[800ms] animate-delay-[10ms] animate-ease-in-out animate-normal animate-fill-both"></div>
         ) : (
           <h2 className="font-bold text-3xl">{`${data?.first_name} ${data?.last_name}`}</h2>
         )}

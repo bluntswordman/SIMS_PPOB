@@ -11,7 +11,7 @@ import {
 import { FiAtSign } from "react-icons/fi";
 import { MdLockOutline } from "react-icons/md";
 
-import type { IError, IFormLogin } from "@/types/auth";
+import type { IFormLogin, INotification } from "@/types/auth";
 import { InputGroup } from "@global/components/elements";
 import { useForm } from "@global/hooks";
 
@@ -22,8 +22,8 @@ const FormLogin = () => {
     password: false,
   });
 
-  const [error, setError] = useState<IError>({
-    status: false,
+  const [error, setError] = useState<INotification>({
+    type: "success",
     message: "",
   });
 
@@ -45,13 +45,13 @@ const FormLogin = () => {
 
       if (result?.error && result.error.length >= 1) {
         setError({
-          status: true,
+          type: "error",
           message: "password yang anda masukan asalah",
         });
 
         setTimeout(() => {
           setError({
-            status: false,
+            type: "success",
             message: "",
           });
         }, 3000);
@@ -111,7 +111,7 @@ const FormLogin = () => {
       >
         Masuk
       </button>
-      {error.status && error.message.length >= 1 && (
+      {error.type === "error" && error.message.length >= 1 && (
         <div className="absolute bottom-4 left-0 w-full h-fit px-4">
           <div className="flex justify-between bg-red-50 items-center px-1.5 py-1 text-red-500 rounded-md">
             <p className="text-sm">{error.message}</p>

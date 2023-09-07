@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import type { IUserProfile } from "@/types/user";
+import type { IUserProfile } from "@global/types/user";
 import { getUser, updateUser, updateUserImage } from "@global/services/user";
 
 const initialState = {
@@ -18,7 +18,7 @@ export const updateUserProfile = createAsyncThunk(
   "user/updateProfile",
   async (data: IUserProfile) => {
     const res = await updateUser(data);
-    return res.data;
+    return res;
   }
 );
 
@@ -26,7 +26,7 @@ export const updateUserProfileImage = createAsyncThunk(
   "user/updateProfileImage",
   async (image: any) => {
     const res = await updateUserImage(image);
-    return res.data;
+    return res;
   }
 );
 

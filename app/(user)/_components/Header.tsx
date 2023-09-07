@@ -15,7 +15,7 @@ const Header: FC = () => {
       <div className="container px-10 flex justify-between items-center mx-auto h-full">
         <h1 className="h-full flex items-center">
           <Link
-            href="/"
+            href="/dashboard"
             className="inline-flex items-center text-lg font-bold text-gray-950"
           >
             <Image

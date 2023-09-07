@@ -15,3 +15,8 @@ export interface IError {
   status: boolean;
   message: string;
 }
+
+export interface INotification {
+  message: string;
+  type: "success" | "error";
+}

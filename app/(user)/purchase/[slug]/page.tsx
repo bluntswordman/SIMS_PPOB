@@ -1,31 +1,21 @@
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 
-import { BackgroundSaldo, ProfilePhoto } from "@global/assets/images";
+import { Listrik } from "@/assets/icons";
+import { BackgroundSaldo } from "@global/assets/images";
 import { CheckSaldo, FormPurchase, Profile } from "@user/_components";
-import {
-  Game,
-  Kurban,
-  Listrik,
-  Musik,
-  PBB,
-  PDAM,
-  PGN,
-  PaketData,
-  Pulsa,
-  Televisi,
-  VoucherMakan,
-  Zakat,
-} from "@/assets/icons";
 
-interface PurchasePageProps {
-  params: {
-    slug: string;
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  return {
+    props: {
+      params,
+    },
   };
-}
+};
 
-export default function PurchasePage({ params }: PurchasePageProps) {
-  console.log(params.slug);
-
+export default function PurchasePage({
+  params,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <main className="w-full min-h-screen pt-24">
       <div className="container px-10 mx-auto flex flex-col space-y-10">
@@ -46,22 +36,7 @@ export default function PurchasePage({ params }: PurchasePageProps) {
             <CheckSaldo />
           </div>
         </div>
-        <div className="flex flex-col space-y-1 text-gray-900">
-          <h5 className="font-medium">Pembayaran</h5>
-          <div className="flex items-center space-x-2">
-            <Image
-              src={Listrik}
-              alt="Listrik"
-              width={32}
-              height={32}
-              className="rounded-lg"
-              priority
-              quality={100}
-            />
-            <h5 className="capitalize font-semibold">{params.slug}</h5>
-          </div>
-        </div>
-        <FormPurchase />
+        <FormPurchase slug={params.slug} />
       </div>
     </main>
   );

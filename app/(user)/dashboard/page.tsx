@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-import { CheckSaldo, LIstPromo, Profile } from "@/app/(user)/_components";
 import {
   Game,
   Kurban,
@@ -16,6 +15,13 @@ import {
   Zakat,
 } from "@/assets/icons";
 import { BackgroundSaldo } from "@/assets/images";
+import {
+  CheckSaldo,
+  LIstPromo,
+  Profile,
+  Banner,
+  ListService,
+} from "@user/_components";
 
 const FEATURES = [
   {
@@ -90,30 +96,14 @@ export default function DashboardPage() {
           </div>
         </div>
         <div className="grid grid-cols-12 gap-3 w-full my-10">
-          {FEATURES.map((feature, index) => (
-            <div
-              key={index}
-              className="col-span-1 flex flex-col space-y-2 items-center"
-            >
-              <Image
-                src={feature.icon}
-                alt={feature.title}
-                width={70}
-                height={70}
-                priority
-                quality={100}
-                className="rounded-lg"
-              />
-              <p className="text-center font-medium text-sm">{feature.title}</p>
-            </div>
-          ))}
+          <ListService />
         </div>
       </div>
       <div className="flex flex-col space-y-5 items-start">
         <div className="px-10 container mx-auto ">
           <h2 className="font-bold">Temukan promo menarik</h2>
         </div>
-        <LIstPromo />
+        <Banner />
       </div>
     </main>
   );
