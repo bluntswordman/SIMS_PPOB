@@ -4,14 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC } from "react";
-import { signIn, useSession, signOut } from "next-auth/react";
 
 import { Logo } from "@/assets/icons";
 
 const Header: FC = () => {
   const pathname = usePathname();
-  const { data: session } = useSession();
-  console.log(session);
 
   return (
     <header className="w-full h-16 shadow fixed bg-white z-[999]">
@@ -64,23 +61,6 @@ const Header: FC = () => {
           >
             Akun
           </Link>
-          {session ? (
-            <button
-              type="button"
-              className="font-semibold transition-all duration-300 text-gray-900 hover:text-gray-800"
-              onClick={() => signOut()}
-            >
-              Keluar
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="font-semibold transition-all duration-300 text-gray-900 hover:text-gray-800"
-              onClick={() => signIn()}
-            >
-              Masuk
-            </button>
-          )}
         </nav>
       </div>
     </header>

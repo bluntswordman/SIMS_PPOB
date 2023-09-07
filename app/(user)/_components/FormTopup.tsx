@@ -5,7 +5,7 @@ import { ChangeEvent, FC, useState } from "react";
 import { MdOutlinePayment } from "react-icons/md";
 
 import { Logo } from "@/assets/icons";
-import { InputText } from "@/components/elements";
+import { InputGroup } from "@/components/elements";
 import { Modal } from "@/components/fragments";
 import { useForm } from "@/hooks";
 
@@ -33,7 +33,7 @@ const FormTopup: FC = () => {
         className="col-span-3 w-full flex flex-col space-y-5 justify-between h-full"
         onSubmit={handleSubmit}
       >
-        <InputText
+        <InputGroup
           required
           name="nominal"
           type="number"

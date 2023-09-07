@@ -1,27 +1,15 @@
 import Image from "next/image";
 
-import { BackgroundSaldo, ProfilePhoto } from "@global/assets/images";
-import { CheckSaldo } from "@user/_components";
+import { BackgroundSaldo } from "@global/assets/images";
+import { CheckSaldo, Profile } from "@user/_components";
 
 export default function TransactionPage() {
   return (
     <main className="w-full min-h-screen pt-24 pb-10">
       <div className="container px-10 mx-auto flex flex-col space-y-10">
         <div className="grid-cols-5 grid gap-5 w-full">
-          <div className="col-span-2 h-full flex flex-col justify-between space-y-3">
-            <Image
-              src={ProfilePhoto}
-              alt="Profile Photo"
-              width={75}
-              height={75}
-              className="rounded-full"
-              priority
-              quality={100}
-            />
-            <div className="flex flex-col space-y-0 text-gray-900">
-              <p className="font-medium">Selamat datang,</p>
-              <h3 className="font-bold text-3xl">Kristanto Wibowo</h3>
-            </div>
+          <div className="col-span-2">
+            <Profile />
           </div>
           <div className="col-span-3 relative w-full h-40">
             <Image

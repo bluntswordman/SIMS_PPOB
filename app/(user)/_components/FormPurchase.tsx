@@ -4,7 +4,7 @@ import { FC } from "react";
 import { MdOutlinePayment } from "react-icons/md";
 
 import { useForm } from "@/hooks";
-import { InputText } from "@global/components/elements";
+import { InputGroup } from "@global/components/elements";
 
 const FormPurchase: FC = () => {
   const [values, handleChange] = useForm({
@@ -13,7 +13,7 @@ const FormPurchase: FC = () => {
 
   return (
     <form className="flex flex-col space-y-5">
-      <InputText
+      <InputGroup
         required
         type="number"
         id="cash"
