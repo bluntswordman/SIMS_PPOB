@@ -3,8 +3,7 @@ import { Inter } from "next/font/google";
 
 import {
   QueryProvider,
-  SessionProvider,
-  ReduxProvider,
+  SessionProvider
 } from "@global/components/fragments";
 
 import "@auth/style.css";

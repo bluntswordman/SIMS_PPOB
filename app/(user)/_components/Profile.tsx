@@ -15,7 +15,9 @@ const Profile = () => {
   const { data: session } = useSession();
   const axios = useAxios();
 
-  const { data, loading } = useSelector((state: RootState) => state.user);
+  const { user, loading, error } = useSelector(
+    (state: RootState) => state.user
+  );
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -26,25 +28,29 @@ const Profile = () => {
 
   return (
     <div className="h-full flex flex-col justify-between space-y-3">
-      <Image
-        src={
-          IMAGE_FORMAT.test(data?.profile_image)
-            ? data?.profile_image
-            : ProfilePhoto
-        }
-        alt="Profile Photo"
-        width={75}
-        height={75}
-        className="rounded-full"
-        priority
-        quality={100}
-      />
+      {loading || user.data?.profile_image === undefined ? (
+        <div className="h-[100px] w-[100px] bg-gray-200 rounded-full loading-animate"></div>
+      ) : (
+        <Image
+          src={
+            IMAGE_FORMAT.test(user.data?.profile_image)
+              ? user.data?.profile_image
+              : ProfilePhoto
+          }
+          alt="Profile Photo"
+          width={75}
+          height={75}
+          className="rounded-full"
+          priority
+          quality={100}
+        />
+      )}
       <div className="flex flex-col space-y-0">
         <p className="font-light text-base">Selamat datang,</p>
-        {loading || data?.first_name === undefined ? (
-          <div className="w-full h-8 rounded-lg bg-gray-200 animate-pulse animate-infinite animate-duration-[800ms] animate-delay-[10ms] animate-ease-in-out animate-normal animate-fill-both"></div>
+        {loading || user.data?.first_name === undefined ? (
+          <div className="w-full h-8 rounded-lg loading-animate"></div>
         ) : (
-          <h2 className="font-bold text-3xl">{`${data?.first_name} ${data?.last_name}`}</h2>
+          <h2 className="font-bold text-3xl">{`${user.data?.first_name} ${user.data?.last_name}`}</h2>
         )}
       </div>
     </div>

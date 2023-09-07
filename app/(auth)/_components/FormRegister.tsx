@@ -12,7 +12,7 @@ import { FaRegUser } from "react-icons/fa";
 import { FiAtSign } from "react-icons/fi";
 import { MdLockOutline } from "react-icons/md";
 
-import type { IFormRegister, INotification } from "@/types/auth";
+import type { AuthRequest, INotification } from "@/types/auth";
 import { InputGroup } from "@global/components/elements";
 import { useForm } from "@global/hooks";
 import { register } from "@global/services/auth";
@@ -26,33 +26,37 @@ const FormRegister: FC = () => {
     confirmPassword: false,
   });
 
-  const [error, setError] = useState<INotification>({
+  const [notification, setNotification] = useState<INotification>({
     type: "success",
     message: "",
   });
 
-  const [values, handleChange] = useForm<IFormRegister>({
+  const [values, handleChange] = useForm<AuthRequest>({
     email: "",
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     password: "",
-    confirmPassword: "",
+    confirm_password: "",
   });
 
   const mutation = useMutation({
     mutationFn: register,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
+      setNotification({
+        type: "success",
+        message: "berhasil registrasi",
+      });
       router.push("/login");
     },
     onError: (error) => {
-      setError({
+      setNotification({
         type: "error",
         message: error.message,
       });
 
       setTimeout(() => {
-        setError({
+        setNotification({
           type: "success",
           message: "",
         });
@@ -61,8 +65,8 @@ const FormRegister: FC = () => {
   });
 
   const handleSubmit = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
       mutation.mutate(values);
     },
     [mutation, values]
@@ -84,21 +88,21 @@ const FormRegister: FC = () => {
         <InputGroup
           required
           type="text"
-          name="firstName"
-          id="firstName"
+          name="first_name"
+          id="first_name"
           placeholder="nama depan"
           leftIcon={<FaRegUser className=" h-4 w-4" />}
-          value={values.firstName}
+          value={values.first_name}
           onChange={handleChange}
         />
         <InputGroup
           required
           type="text"
-          name="lastName"
-          id="lastName"
+          name="last_name"
+          id="last_name"
           placeholder="nama belakang"
           leftIcon={<FaRegUser className=" h-4 w-4" />}
-          value={values.lastName}
+          value={values.last_name}
           onChange={handleChange}
         />
         <InputGroup
@@ -133,10 +137,10 @@ const FormRegister: FC = () => {
           required
           autoComplete="off"
           type={eyes.confirmPassword ? "text" : "password"}
-          name="confirmPassword"
-          id="confirmPassword"
+          name="confirm_password"
+          id="confirm_password"
           placeholder="konfirmasi password"
-          isValidate={values.password === values.confirmPassword}
+          isValidate={values.password === values.confirm_password}
           message="password tidak sama"
           leftIcon={<MdLockOutline className=" h-4 w-4" />}
           rightIcon={
@@ -162,7 +166,7 @@ const FormRegister: FC = () => {
               />
             )
           }
-          value={values.confirmPassword}
+          value={values.confirm_password}
           onChange={handleChange}
         />
       </div>
@@ -170,19 +174,25 @@ const FormRegister: FC = () => {
         type="submit"
         disabled={
           values.email.length < 1 ||
-          values.firstName.length < 1 ||
-          values.lastName.length < 1 ||
+          (values.last_name ? values.last_name.length < 1 : true) ||
+          (values.first_name ? values.first_name.length < 1 : true) ||
           values.password.length < 1 ||
-          values.confirmPassword.length < 1
+          (values.confirm_password ? values.confirm_password.length < 1 : true)
         }
         className="btn-solid-primary"
       >
         Registrasi
       </button>
-      {error.type === "error" && error.message.length >= 1 && (
+      {notification.message.length >= 1 && (
         <div className="absolute bottom-4 left-0 w-full h-fit px-4">
-          <div className="flex justify-between bg-red-50 items-center px-1.5 py-1 text-red-500 rounded-md">
-            <p className="text-sm">{error.message}</p>
+          <div
+            className={`flex justify-between  items-center px-1.5 py-1 rounded-md ${
+              notification.type === "success"
+                ? "bg-emerald-50 text-emerald-500"
+                : "bg-red-50 text-red-500"
+            }`}
+          >
+            <p className="text-sm">{notification.message}</p>
             <button type="button" className="">
               <AiOutlineClose className="h-4 w-4" />
             </button>

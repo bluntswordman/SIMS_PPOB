@@ -1,32 +1,45 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import type { IUserProfile } from "@global/types/user";
 import { getUser, updateUser, updateUserImage } from "@global/services/user";
+import type {
+  UserImageRequest,
+  UserRequest,
+  UserResponse,
+} from "@global/types/user";
+
+interface UserState {
+  user: UserResponse;
+  loading: boolean;
+  error: string | null;
+}
 
 const initialState = {
-  data: {},
+  user: {},
   loading: false,
   error: null,
-} as any;
+} as UserState;
 
-export const getUserProfile = createAsyncThunk("user/getProfile", async () => {
-  const res = await getUser();
-  return res.data;
-});
-
-export const updateUserProfile = createAsyncThunk(
-  "user/updateProfile",
-  async (data: IUserProfile) => {
-    const res = await updateUser(data);
-    return res;
+export const getUserProfile = createAsyncThunk(
+  "user/getProfile",
+  async (): Promise<UserResponse> => {
+    const response = await getUser();
+    return response;
   }
 );
 
-export const updateUserProfileImage = createAsyncThunk(
+export const updateUserProfile = createAsyncThunk(
+  "user/updateProfile",
+  async (request: UserRequest): Promise<UserResponse> => {
+    const response = await updateUser(request);
+    return response;
+  }
+);
+
+export const updateUserImageProfile = createAsyncThunk(
   "user/updateProfileImage",
-  async (image: any) => {
-    const res = await updateUserImage(image);
-    return res;
+  async (request: UserImageRequest): Promise<UserResponse> => {
+    const response = await updateUserImage(request);
+    return response;
   }
 );
 
@@ -40,31 +53,33 @@ export const userSlice = createSlice({
     });
     builder.addCase(getUserProfile.fulfilled, (state, action) => {
       state.loading = false;
-      state.data = action.payload;
+      state.user = action.payload;
     });
     builder.addCase(getUserProfile.rejected, (state) => {
       state.loading = false;
       state.error = "error";
     });
+
     builder.addCase(updateUserProfile.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(updateUserProfile.fulfilled, (state, action) => {
       state.loading = false;
-      state.data = action.payload;
+      state.user = action.payload;
     });
     builder.addCase(updateUserProfile.rejected, (state) => {
       state.loading = false;
       state.error = "error";
     });
-    builder.addCase(updateUserProfileImage.pending, (state) => {
+
+    builder.addCase(updateUserImageProfile.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(updateUserProfileImage.fulfilled, (state, action) => {
+    builder.addCase(updateUserImageProfile.fulfilled, (state, action) => {
       state.loading = false;
-      state.data = action.payload;
+      state.user = action.payload;
     });
-    builder.addCase(updateUserProfileImage.rejected, (state) => {
+    builder.addCase(updateUserImageProfile.rejected, (state) => {
       state.loading = false;
       state.error = "error";
     });

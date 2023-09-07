@@ -11,7 +11,10 @@ import {
 import { FiAtSign } from "react-icons/fi";
 import { MdLockOutline } from "react-icons/md";
 
-import type { IFormLogin, INotification } from "@/types/auth";
+import type {
+  AuthRequest,
+  INotification
+} from "@/types/auth";
 import { InputGroup } from "@global/components/elements";
 import { useForm } from "@global/hooks";
 
@@ -22,18 +25,18 @@ const FormLogin = () => {
     password: false,
   });
 
-  const [error, setError] = useState<INotification>({
+  const [notification, setNotification] = useState<INotification>({
     type: "success",
     message: "",
   });
 
-  const [values, handleChange] = useForm<IFormLogin>({
+  const [values, handleChange] = useForm<AuthRequest>({
     email: "",
     password: "",
   });
 
   const handleSubmit = useCallback(
-    async (e: FormEvent<HTMLFormElement>) => {
+    async (e: FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
       const { email, password } = values;
 
@@ -44,20 +47,24 @@ const FormLogin = () => {
       });
 
       if (result?.error && result.error.length >= 1) {
-        setError({
+        setNotification({
           type: "error",
           message: "password yang anda masukan asalah",
         });
-
-        setTimeout(() => {
-          setError({
-            type: "success",
-            message: "",
-          });
-        }, 3000);
       } else {
+        setNotification({
+          type: "success",
+          message: "berhasil masuk",
+        });
         router.push("/dashboard");
       }
+
+      setTimeout(() => {
+        setNotification({
+          type: "success",
+          message: "",
+        });
+      }, 3000);
     },
     [router, values]
   );
@@ -111,11 +118,17 @@ const FormLogin = () => {
       >
         Masuk
       </button>
-      {error.type === "error" && error.message.length >= 1 && (
+      {notification.message.length >= 1 && (
         <div className="absolute bottom-4 left-0 w-full h-fit px-4">
-          <div className="flex justify-between bg-red-50 items-center px-1.5 py-1 text-red-500 rounded-md">
-            <p className="text-sm">{error.message}</p>
-            <button type="button" className="">
+          <div
+            className={`flex justify-between items-center px-1.5 py-1 rounded-md ${
+              notification.type === "success"
+                ? "bg-emerald-50 text-emerald-500"
+                : "bg-red-50 text-red-500"
+            }`}
+          >
+            <p className="text-sm">{notification.message}</p>
+            <button type="button">
               <AiOutlineClose className="h-4 w-4" />
             </button>
           </div>

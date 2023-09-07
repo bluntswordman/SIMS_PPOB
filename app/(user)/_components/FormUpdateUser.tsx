@@ -14,8 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { InputGroup } from "@/components/elements";
 import { useForm } from "@/hooks";
-import type { INotification } from "@/types/auth";
-import type { IUserProfile } from "@/types/user";
 import { useAxios } from "@global/libs/axios";
 import { AppDispatch, RootState } from "@global/store";
 import {
@@ -23,7 +21,10 @@ import {
   updateUserProfile,
 } from "@global/store/features/userSlice";
 
-const FormAccount = () => {
+import type { INotification } from "@/types/auth";
+import type { UserRequest } from "@/types/user";
+
+const FormUpdateUser = () => {
   const [update, setUpdate] = useState<boolean>(false);
   const [notification, setNotification] = useState<INotification | null>({
     message: "",
@@ -32,13 +33,13 @@ const FormAccount = () => {
 
   const { data: session } = useSession();
   const axios = useAxios();
-  const { data } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
-  const [values, handleChange] = useForm<IUserProfile>({
+  const [values, handleChange] = useForm<UserRequest>({
     email: "",
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
   });
 
   useEffect(() => {
@@ -48,27 +49,27 @@ const FormAccount = () => {
   }, [dispatch, axios, session?.token]);
 
   useEffect(() => {
-    if (data) {
+    if (user.data) {
       handleChange({
         target: {
           name: "email",
-          value: data.email,
+          value: user.data?.email,
         },
       } as unknown as ChangeEvent<HTMLInputElement>);
       handleChange({
         target: {
-          name: "firstName",
-          value: data.first_name,
+          name: "first_name",
+          value: user.data?.first_name,
         },
       } as unknown as ChangeEvent<HTMLInputElement>);
       handleChange({
         target: {
-          name: "lastName",
-          value: data.last_name,
+          name: "last_name",
+          value: user.data?.last_name,
         },
       } as unknown as ChangeEvent<HTMLInputElement>);
     }
-  }, [data, handleChange]);
+  }, [user.data, handleChange]);
 
   const handleSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
@@ -76,19 +77,20 @@ const FormAccount = () => {
       if (session?.token) {
         dispatch(updateUserProfile(values))
           .unwrap()
-          .then((data) => {
+          .then((response) => {
             setUpdate(false);
-            if (data.status >= 1) {
+            if (response.data === null) {
               setNotification({
-                message: data.message,
+                message: response.message,
                 type: "error",
               });
             } else {
               setNotification({
-                message: "Data berhasil diupdate",
+                message: response.message,
                 type: "success",
               });
             }
+            dispatch(getUserProfile());
             setTimeout(() => {
               setNotification({
                 message: "",
@@ -134,10 +136,10 @@ const FormAccount = () => {
             label="nama depan"
             placeholder="Masukkan Nama Depan"
             type="text"
-            name="firstName"
-            id="firstName"
+            name="first_name"
+            id="first_name"
             leftIcon={<FaRegUser className=" h-4 w-4" />}
-            value={values.firstName}
+            value={values.first_name}
             onChange={handleChange}
           />
           <InputGroup
@@ -145,10 +147,10 @@ const FormAccount = () => {
             label="nama belakang"
             placeholder="Masukkan Nama Belakang"
             type="text"
-            name="lastName"
-            id="lastName"
+            name="last_name"
+            id="last_name"
             leftIcon={<FaRegUser className=" h-4 w-4" />}
-            value={values.lastName}
+            value={values.last_name}
             onChange={handleChange}
           />
         </div>
@@ -179,4 +181,4 @@ const FormAccount = () => {
   );
 };
 
-export default FormAccount;
+export default FormUpdateUser;

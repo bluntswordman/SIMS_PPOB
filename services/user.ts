@@ -1,34 +1,42 @@
-import axios from "@/libs/axios";
-import type { IUserProfile } from "@/types/user";
+import axios from "@global/libs/axios";
+import type {
+  UserImageRequest,
+  UserRequest,
+  UserResponse,
+} from "@global/types/user";
 
-export const getUser = async () => {
+export const getUser = async (): Promise<UserResponse> => {
   try {
-    const res = await axios.get("/profile");
-    return res.data;
+    const response = await axios.get("/profile");
+    return response.data;
   } catch (error: any) {
     return error.response.data;
   }
 };
 
-export const updateUser = async (data: IUserProfile) => {
+export const updateUser = async (
+  request: UserRequest
+): Promise<UserResponse> => {
   try {
-    const res = await axios.put("/profile/update", {
-      first_name: data.firstName,
-      last_name: data.lastName,
+    const response = await axios.put("/profile/update", {
+      first_name: request.first_name,
+      last_name: request.last_name,
     });
 
-    return res.data;
+    return response.data;
   } catch (error: any) {
     return error.response.data;
   }
 };
 
-export const updateUserImage = async (image: any) => {
+export const updateUserImage = async (
+  image: UserImageRequest
+): Promise<UserResponse> => {
   try {
-    const res = await axios.put(
+    const response = await axios.put(
       "/profile/image",
       {
-        file: image,
+        file: image.file,
       },
       {
         headers: {
@@ -37,7 +45,7 @@ export const updateUserImage = async (image: any) => {
       }
     );
 
-    return res.data;
+    return response.data;
   } catch (error: any) {
     return error.response.data;
   }
