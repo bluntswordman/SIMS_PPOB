@@ -76,7 +76,7 @@ const HistoryTransaction = () => {
         <button
           onClick={handleNextPage}
           disabled={!hasMore}
-          className="w-fit h-fit text-center text-gray-900 font-semibold cursor-pointer disabled:cursor-not-allowed disabled:text-gray-400"
+          className="w-fit h-fit text-center text-red-500 font-semibold cursor-pointer disabled:cursor-not-allowed disabled:text-gray-400 hover:text-red-600 transition-colors duration-300"
         >
           Next
         </button>

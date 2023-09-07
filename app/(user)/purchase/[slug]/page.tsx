@@ -1,21 +1,15 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 
-import { Listrik } from "@/assets/icons";
 import { BackgroundSaldo } from "@global/assets/images";
 import { CheckSaldo, FormPurchase, Profile } from "@user/_components";
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  return {
-    props: {
-      params,
-    },
+interface PurchasePageProps {
+  params: {
+    slug: string;
   };
-};
+}
 
-export default function PurchasePage({
-  params,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function PurchasePage({ params }: PurchasePageProps) {
   return (
     <main className="w-full min-h-screen pt-24">
       <div className="container px-10 mx-auto flex flex-col space-y-10">

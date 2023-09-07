@@ -145,7 +145,7 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
         )}
         <div className="flex flex-col">
           <p className="text-gray-900 text-center font-medium">
-            {`Pembayaran ${service.service_name} sebesar`}
+            {`Pembayaran ${service?.service_name} sebesar`}
           </p>
           <h6 className="text-gray-900 text-center font-bold text-2xl">
             {`Rp.${new Intl.NumberFormat("id-ID").format(values.cash)}`}
@@ -177,7 +177,7 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
         />
         <div className="flex flex-col">
           <p className="text-gray-900 text-center font-medium">
-            {`Bayar ${service.service_name} sebesar`}
+            {`Bayar ${service?.service_name} sebesar`}
           </p>
           <h6 className="text-gray-900 text-center font-bold text-2xl">
             {`Rp.${new Intl.NumberFormat("id-ID").format(values.cash)}`}
