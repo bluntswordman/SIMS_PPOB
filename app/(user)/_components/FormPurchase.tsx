@@ -84,6 +84,10 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
     [dispatch, service, session?.token]
   );
 
+  console.log(loading);
+  console.log(service?.service_icon);
+  console.log(loading || service?.service_icon === undefined);
+
   return (
     <>
       <div className="flex flex-col space-y-1 text-gray-900">
@@ -145,7 +149,7 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
         )}
         <div className="flex flex-col">
           <p className="text-gray-900 text-center font-medium">
-            {`Pembayaran ${service.service_name} sebesar`}
+            {`Pembayaran ${service?.service_name} sebesar`}
           </p>
           <h6 className="text-gray-900 text-center font-bold text-2xl">
             {`Rp.${new Intl.NumberFormat("id-ID").format(values.cash)}`}
@@ -177,7 +181,7 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
         />
         <div className="flex flex-col">
           <p className="text-gray-900 text-center font-medium">
-            {`Bayar ${service.service_name} sebesar`}
+            {`Bayar ${service?.service_name} sebesar`}
           </p>
           <h6 className="text-gray-900 text-center font-bold text-2xl">
             {`Rp.${new Intl.NumberFormat("id-ID").format(values.cash)}`}
