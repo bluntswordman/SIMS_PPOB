@@ -1,8 +1,8 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { FormEvent, useCallback, useState, FC } from "react";
 import { useRouter } from "next/navigation";
+import { FC, FormEvent, useCallback, useState } from "react";
 import {
   AiOutlineClose,
   AiOutlineEye,
@@ -12,7 +12,7 @@ import { FaRegUser } from "react-icons/fa";
 import { FiAtSign } from "react-icons/fi";
 import { MdLockOutline } from "react-icons/md";
 
-import type { IError, IFormRegister } from "@/types/auth";
+import type { IFormRegister, INotification } from "@/types/auth";
 import { InputGroup } from "@global/components/elements";
 import { useForm } from "@global/hooks";
 import { register } from "@global/services/auth";
@@ -26,8 +26,8 @@ const FormRegister: FC = () => {
     confirmPassword: false,
   });
 
-  const [error, setError] = useState<IError>({
-    status: false,
+  const [error, setError] = useState<INotification>({
+    type: "success",
     message: "",
   });
 
@@ -47,13 +47,13 @@ const FormRegister: FC = () => {
     },
     onError: (error) => {
       setError({
-        status: true,
+        type: "error",
         message: error.message,
       });
 
       setTimeout(() => {
         setError({
-          status: false,
+          type: "success",
           message: "",
         });
       }, 3000);
@@ -179,7 +179,7 @@ const FormRegister: FC = () => {
       >
         Registrasi
       </button>
-      {error.status && error.message.length >= 1 && (
+      {error.type === "error" && error.message.length >= 1 && (
         <div className="absolute bottom-4 left-0 w-full h-fit px-4">
           <div className="flex justify-between bg-red-50 items-center px-1.5 py-1 text-red-500 rounded-md">
             <p className="text-sm">{error.message}</p>

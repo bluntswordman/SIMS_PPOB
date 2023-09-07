@@ -14,10 +14,15 @@ import {
   getUserProfile,
   updateUserProfileImage,
 } from "@global/store/features/userSlice";
+import type { INotification } from "@global/types/auth";
 
 const FormProfileImage = () => {
   const [image, setImage] = useState<File | null>(null);
   const [update, setUpdate] = useState<boolean>(false);
+  const [notification, setNotification] = useState<INotification | null>({
+    message: "",
+    type: "success",
+  });
 
   const { data: session } = useSession();
   const axios = useAxios();
@@ -36,21 +41,46 @@ const FormProfileImage = () => {
       if (session?.token) {
         dispatch(updateUserProfileImage(image))
           .unwrap()
-          .then(() => {
-            dispatch(getUserProfile());
+          .then((res) => {
+            if (res.data === null) {
+              setNotification({
+                message: res.message,
+                type: "error",
+              });
+            } else {
+              setNotification({
+                message: "Foto profile berhasil diupdate",
+                type: "success",
+              });
+            }
+            setTimeout(() => {
+              setNotification({
+                message: "",
+                type: "success",
+              });
+            }, 5000);
             setImage(null);
             setUpdate(false);
-          })
-          .catch((err) => {
-            console.log(err);
+            dispatch(getUserProfile());
           });
       }
     },
-    [dispatch, session?.token, image]
+    [session?.token, dispatch, image]
   );
 
   return (
     <>
+      {notification && notification?.message.length >= 1 && (
+        <div
+          className={`absolute w-fit p-2 rounded-md h-fit top-20 right-5 overflow-hidden ${
+            notification?.type === "success"
+              ? "text-emerald-500 bg-emerald-50"
+              : "text-red-500 bg-red-50"
+          }`}
+        >
+          <p className="text-sm">{notification.message}</p>
+        </div>
+      )}
       <div className="flex flex-col items-center space-y-3">
         <div className="relative w-fit h-fit rounded-full border">
           <input
@@ -96,7 +126,7 @@ const FormProfileImage = () => {
         )}
       </div>
       {update && (
-        <div className="w-full h-screen absolute z-[999] top-0 left-0 flex justify-center items-center bg-opacity-25 bg-gray-900">
+        <div className="w-full h-screen absolute z-[777] top-0 left-0 flex justify-center items-center bg-opacity-25 bg-gray-900">
           <div className="w-1/2 h-fit p-5 bg-white rounded-md flex flex-col items-center border relative space-y-10">
             <Image
               src={image ? URL.createObjectURL(image) : ProfilePhoto}

@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./features/userSlice";
+import balanceSlice from "./features/balanceSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       user: userReducer,
+      balance: balanceSlice,
     },
   });
 };

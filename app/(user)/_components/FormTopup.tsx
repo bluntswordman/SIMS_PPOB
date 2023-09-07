@@ -1,13 +1,23 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useCallback, useState } from "react";
 import { MdOutlinePayment } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { AiFillCheckCircle } from "react-icons/ai";
 
 import { Logo } from "@/assets/icons";
 import { InputGroup } from "@/components/elements";
 import { Modal } from "@/components/fragments";
 import { useForm } from "@/hooks";
+import { useAxios } from "@/libs/axios";
+import {
+  getBalanceAccount,
+  addBalanceAccount,
+} from "@/store/features/balanceSlice";
+import type { INotification } from "@/types/auth";
+import { AppDispatch, RootState } from "@global/store";
 
 interface IFormTopup {
   nominal: number;
@@ -16,23 +26,54 @@ interface IFormTopup {
 const NOMINALS = [10000, 20000, 50000, 100000, 250000, 500000];
 
 const FormTopup: FC = () => {
-  const [isShow, setIsShow] = useState<boolean>(false);
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [showNotification, setShowNotification] = useState<boolean>(false);
+  const [notification, setNotification] = useState<INotification | null>({
+    message: "",
+    type: "success",
+  });
+
+  const { data: session } = useSession();
+  const axios = useAxios();
+
+  const { data, loading } = useSelector((state: RootState) => state.balance);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [values, handleChange] = useForm<IFormTopup>({
     nominal: 0,
   });
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(values);
-  };
+  const handleSubmit = useCallback(
+    async (e: ChangeEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (session?.token) {
+        dispatch(addBalanceAccount(values.nominal))
+          .unwrap()
+          .then((res) => {
+            console.log(res);
+            if (res.data === null) {
+              setNotification({
+                message: "Gagal",
+                type: "error",
+              });
+            } else {
+              setNotification({
+                message: "Berhasil",
+                type: "success",
+              });
+              dispatch(getBalanceAccount());
+              setShowForm(false);
+              setShowNotification(true);
+            }
+          });
+      }
+    },
+    [dispatch, session?.token, values.nominal]
+  );
 
   return (
     <div className="grid grid-cols-5 gap-5 w-full">
-      <form
-        className="col-span-3 w-full flex flex-col space-y-5 justify-between h-full"
-        onSubmit={handleSubmit}
-      >
+      <div className="col-span-3 w-full flex flex-col space-y-5 justify-between h-full">
         <InputGroup
           required
           name="nominal"
@@ -47,11 +88,11 @@ const FormTopup: FC = () => {
           type="button"
           disabled={values.nominal === 0}
           className="w-full p-2 bg-red-500 text-white font-medium rounded-md transition-all duration-300 hover:bg-red-600 disabled:bg-gray-200"
-          onClick={() => setIsShow(true)}
+          onClick={() => setShowForm(true)}
         >
           Top Up
         </button>
-      </form>
+      </div>
       <div className="col-span-2 grid grid-cols-3 gap-3">
         {NOMINALS.map((nominal: number) => (
           <button
@@ -76,8 +117,37 @@ const FormTopup: FC = () => {
         ))}
       </div>
       <Modal
-        isShow={isShow}
-        setIsShow={setIsShow}
+        isShow={showNotification}
+        setIsShow={setShowNotification}
+        className="w-[25%] h-fit bg-white rounded-lg py-5 px-3 flex flex-col items-center justify-center space-y-3"
+      >
+        {notification?.type === "error" ? (
+          <AiFillCheckCircle className="w-16 h-16 text-red-500" />
+        ) : (
+          <AiFillCheckCircle className="w-16 h-16 text-emerald-500" />
+        )}
+        <div className="flex flex-col">
+          <p className="text-gray-900 text-center font-medium">
+            Top Up sebesar
+          </p>
+          <h6 className="text-gray-900 text-center font-bold text-2xl">
+            {`Rp.${new Intl.NumberFormat("id-ID").format(values.nominal)}`}
+          </h6>
+          <p className="text-gray-900 text-center font-medium">
+            {notification?.message}
+          </p>
+        </div>
+        <button
+          type="button"
+          className="w-fit h-fit text-red-500 font-semibold"
+          onClick={() => setShowNotification(false)}
+        >
+          Kembali ke beranda
+        </button>
+      </Modal>
+      <Modal
+        isShow={showForm}
+        setIsShow={setShowForm}
         className="w-[25%] h-fit bg-white rounded-lg py-5 px-3 flex flex-col items-center justify-center space-y-3"
       >
         <Image
@@ -93,19 +163,21 @@ const FormTopup: FC = () => {
             Beli listrik prabayar senilai
           </p>
           <h6 className="text-gray-900 text-center font-bold text-2xl">
-            Rp10.000 ?
+            {`Rp.${new Intl.NumberFormat("id-ID").format(values.nominal)}`}
           </h6>
         </div>
-        <button
-          type="button"
-          className="w-fit h-fit text-red-500 font-semibold"
-        >
-          Ya, lanjutkan bayar
-        </button>
+        <form onSubmit={handleSubmit}>
+          <button
+            type="submit"
+            className="w-fit h-fit text-red-500 font-semibold"
+          >
+            Ya, lanjutkan bayar
+          </button>
+        </form>
         <button
           type="button"
           className="w-fit h-fit text-gray-400 font-semibold"
-          onClick={() => setIsShow(false)}
+          onClick={() => setShowForm(false)}
         >
           Batalkan
         </button>
