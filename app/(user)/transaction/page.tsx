@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import { BackgroundSaldo } from "@global/assets/images";
-import { CheckSaldo, Profile } from "@user/_components";
+import { CheckSaldo, HistoryTransaction, Profile } from "@user/_components";
 
 export default function TransactionPage() {
   return (
@@ -26,7 +26,8 @@ export default function TransactionPage() {
         </div>
         <div className="flex flex-col space-y-7 text-gray-900">
           <h5 className="font-semibold">Semua Transaksi</h5>
-          <div className="flex flex-col space-y-5">
+          <HistoryTransaction />
+          {/* <div className="flex flex-col space-y-5">
             {Array.from({ length: 5 }).map((_, index) => (
               <div
                 key={index}
@@ -53,7 +54,7 @@ export default function TransactionPage() {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </main>

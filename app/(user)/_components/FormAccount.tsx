@@ -1,7 +1,13 @@
 "use client";
 
 import { signOut, useSession } from "next-auth/react";
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { FaRegUser } from "react-icons/fa";
 import { FiAtSign } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,19 +54,19 @@ const FormAccount = () => {
           name: "email",
           value: data.email,
         },
-      } as any);
+      } as unknown as ChangeEvent<HTMLInputElement>);
       handleChange({
         target: {
           name: "firstName",
           value: data.first_name,
         },
-      } as any);
+      } as unknown as ChangeEvent<HTMLInputElement>);
       handleChange({
         target: {
           name: "lastName",
           value: data.last_name,
         },
-      } as any);
+      } as unknown as ChangeEvent<HTMLInputElement>);
     }
   }, [data, handleChange]);
 

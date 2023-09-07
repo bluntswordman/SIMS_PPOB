@@ -3,21 +3,20 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { ChangeEvent, FC, useCallback, useState } from "react";
+import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { MdOutlinePayment } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { AiFillCheckCircle } from "react-icons/ai";
 
-import { Logo } from "@/assets/icons";
-import { InputGroup } from "@/components/elements";
-import { Modal } from "@/components/fragments";
-import { useForm } from "@/hooks";
-import { useAxios } from "@/libs/axios";
-import {
-  getBalanceAccount,
-  addBalanceAccount,
-} from "@/store/features/balanceSlice";
-import type { INotification } from "@/types/auth";
+import { Logo } from "@global/assets/icons";
+import { InputGroup } from "@global/components/elements";
+import { Modal } from "@global/components/fragments";
+import { useForm } from "@global/hooks";
 import { AppDispatch, RootState } from "@global/store";
+import {
+  addBalanceAccount,
+  getBalanceAccount,
+} from "@global/store/features/balanceSlice";
+import type { INotification } from "@global/types/auth";
 
 interface IFormTopup {
   nominal: number;
@@ -34,9 +33,7 @@ const FormTopup: FC = () => {
   });
 
   const { data: session } = useSession();
-  const axios = useAxios();
-
-  const { data, loading } = useSelector((state: RootState) => state.balance);
+  const { loading } = useSelector((state: RootState) => state.balance);
   const dispatch = useDispatch<AppDispatch>();
 
   const [values, handleChange] = useForm<IFormTopup>({
@@ -86,7 +83,9 @@ const FormTopup: FC = () => {
         />
         <button
           type="button"
-          disabled={values.nominal === 0}
+          disabled={
+            values.nominal < 10000 || values.nominal > 1000000 || loading
+          }
           className="w-full p-2 bg-red-500 text-white font-medium rounded-md transition-all duration-300 hover:bg-red-600 disabled:bg-gray-200"
           onClick={() => setShowForm(true)}
         >
@@ -122,7 +121,7 @@ const FormTopup: FC = () => {
         className="w-[25%] h-fit bg-white rounded-lg py-5 px-3 flex flex-col items-center justify-center space-y-3"
       >
         {notification?.type === "error" ? (
-          <AiFillCheckCircle className="w-16 h-16 text-red-500" />
+          <AiFillCloseCircle className="w-16 h-16 text-red-500" />
         ) : (
           <AiFillCheckCircle className="w-16 h-16 text-emerald-500" />
         )}
