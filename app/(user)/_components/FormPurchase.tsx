@@ -84,10 +84,6 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
     [dispatch, service, session?.token]
   );
 
-  console.log(loading);
-  console.log(service?.service_icon);
-  console.log(loading || service?.service_icon === undefined);
-
   return (
     <>
       <div className="flex flex-col space-y-1 text-gray-900">
