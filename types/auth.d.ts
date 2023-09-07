@@ -6,17 +6,21 @@ export interface IFormRegister {
   confirmPassword: string;
 }
 
-export interface IFormLogin {
-  email: string;
-  password: string;
-}
-
-export interface IError {
-  status: boolean;
-  message: string;
-}
-
 export interface INotification {
   message: string;
   type: "success" | "error";
+}
+
+export interface AuthRequest {
+  email: string;
+  first_name?: string;
+  last_name?: string;
+  password: string;
+  confirm_password?: string;
+}
+
+export interface AuthResponse {
+  status: number;
+  message: string;
+  data: null;
 }

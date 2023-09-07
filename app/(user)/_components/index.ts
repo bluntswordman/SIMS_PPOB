@@ -1,7 +1,7 @@
 export { default as Banner } from "./Banner";
 export { default as CheckSaldo } from "./CheckSaldo";
-export { default as FormAccount } from "./FormAccount";
-export { default as FormProfileImage } from "./FormProfileImage";
+export { default as FormAccount } from "./FormUpdateUser";
+export { default as FormProfileImage } from "./FormUpdateUserImage";
 export { default as FormPurchase } from "./FormPurchase";
 export { default as FormTopup } from "./FormTopup";
 export { default as Header } from "./Header";

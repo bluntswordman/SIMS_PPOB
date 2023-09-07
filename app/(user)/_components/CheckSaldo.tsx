@@ -5,6 +5,7 @@ import { FC, useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 
+import { Loading } from "@/components/vectors";
 import { useAxios } from "@/libs/axios";
 import { getBalanceAccount } from "@/store/features/balanceSlice";
 import { AppDispatch, RootState } from "@global/store";
@@ -26,18 +27,20 @@ const CheckSaldo: FC = () => {
 
   return (
     <div className="absolute p-5 text-white flex flex-col space-y-4 justify-center h-full">
-      <h3 className="font-medium">Saldo Anda</h3>
-      <p className="text-2xl font-bold select-none">
-        {showSaldo ? (
-          <>
-            {loading || data.balance === undefined
-              ? "Loading..."
-              : `Rp. ${data.balance.toLocaleString("id-ID")}`}
-          </>
-        ) : (
-          <>{`Rp. ${"*".repeat(7)}`}</>
-        )}
-      </p>
+      <h3 className="font-medium z-20">Saldo Anda</h3>
+      {loading || data.balance === undefined ? (
+        <div className="flex justify-start text-start">
+          <Loading width={30} height={30} />
+        </div>
+      ) : (
+        <p className="text-2xl font-bold select-none">
+          {showSaldo ? (
+            <>{`Rp. ${data.balance.toLocaleString("id-ID")}`}</>
+          ) : (
+            <>{`Rp. ${"*".repeat(7)}`}</>
+          )}
+        </p>
+      )}
       <button
         type="button"
         className="inline-flex items-center cursor-pointer text-sm h-fit w-fit outline-none ring-0"
