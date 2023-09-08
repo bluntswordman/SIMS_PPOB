@@ -1,38 +1,37 @@
 import axios from "@global/libs/axios";
-import { IService } from "@/types/module";
+import type { IBanner, IService, Response } from "@global/types";
 
-export const getBanners = async () => {
+export const getBanners = async (): Promise<Response<IBanner[]>> => {
   try {
-    const res = await axios.get("/banner");
-    // console.log(res.data);
+    const response = await axios.get("/banner");
 
-    return res.data;
-  } catch (error: any) {
-    // console.log(error.response.data);
-
-    return error.response.data;
-  }
-};
-
-export const getServices = async () => {
-  try {
-    const res = await axios.get("/services");
-
-    return res.data;
+    return response.data;
   } catch (error: any) {
     return error.response.data;
   }
 };
 
-export const getServicesBySlug = async (slug: string) => {
+export const getServices = async (): Promise<Response<IService[]>> => {
   try {
-    const res = await axios.get("/services");
-    const find = res.data.data.find(
+    const response = await axios.get("/services");
+
+    return response.data;
+  } catch (error: any) {
+    return error.response.data;
+  }
+};
+
+export const getServiceBySlug = async (
+  slug: string
+): Promise<IService | null> => {
+  try {
+    const response = await axios.get("/services");
+    const find = response.data.data.find(
       (item: IService) => item.service_code === slug
     );
 
     return find;
   } catch (error: any) {
-    return error.response.data;
+    return null;
   }
 };

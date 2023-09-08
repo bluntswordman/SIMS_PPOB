@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import { BackgroundSaldo } from "@global/assets/images";
-import { CheckSaldo, FormPurchase, Profile } from "@user/_components";
+import { Balance, FormPurchase, Profile } from "@user/_components";
 
 interface PurchasePageProps {
   params: {
@@ -27,7 +27,7 @@ export default function PurchasePage({ params }: PurchasePageProps) {
               priority
               quality={100}
             />
-            <CheckSaldo />
+            <Balance />
           </div>
         </div>
         <FormPurchase slug={params.slug} />

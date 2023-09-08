@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { Logo } from "@/assets/icons";
-import { LoginIllustration } from "@/assets/images";
+import { Logo } from "@global/assets/icons";
+import { LoginIllustration } from "@global/assets/images";
 import { FormRegister } from "@auth/_components";
 
 export default function RegisterPage() {

@@ -6,10 +6,11 @@ import Link from "next/link";
 import { FC, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useAxios } from "@/libs/axios";
-import { getServicesModule } from "@/store/features/moduleSlice";
-import type { IService } from "@/types/module";
+import { useAxios } from "@global/libs/axios";
 import { AppDispatch, RootState } from "@global/store";
+import { getServicesModule } from "@global/store/features/moduleSlice";
+
+import type { IService } from "@global/types";
 
 const ListService: FC = () => {
   const { data: session } = useSession();
@@ -41,13 +42,12 @@ const ListService: FC = () => {
           {services.map((service: IService, index: number) => (
             <Link
               key={index}
-              target="_blank"
               href={`/purchase/${service.service_code}`}
               className="col-span-1 flex flex-col space-y-2 items-center"
             >
               <Image
                 src={service.service_icon}
-                alt={service.service_name}
+                alt={`${service.service_name}`}
                 width={70}
                 height={70}
                 priority

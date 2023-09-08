@@ -1,10 +1,10 @@
-export { default as Banner } from "./Banner";
-export { default as CheckSaldo } from "./CheckSaldo";
+export { default as Balance } from "./Balance";
+export { default as FormPurchase } from "./FormPurchase";
+export { default as FormTopUp } from "./FormTopUp";
 export { default as FormAccount } from "./FormUpdateUser";
 export { default as FormProfileImage } from "./FormUpdateUserImage";
-export { default as FormPurchase } from "./FormPurchase";
-export { default as FormTopup } from "./FormTopup";
 export { default as Header } from "./Header";
 export { default as HistoryTransaction } from "./HistoryTransaction";
+export { default as ListBanner } from "./ListBanner";
 export { default as ListService } from "./ListService";
 export { default as Profile } from "./Profile";

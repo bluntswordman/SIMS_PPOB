@@ -5,35 +5,32 @@ import {
   getHistoryTransaction,
 } from "@global/services/transaction";
 
-interface IHistoryTransaction {
-  offset?: number;
-  limit?: number;
-}
+import type {
+  ITransaction,
+  RequestHistoryTransaction,
+  RequestTransaction,
+  Response,
+} from "@global/types";
+import type { TransactionState } from "@global/types/slice";
 
-const initialState = {
-  transaction: {},
-  history: [],
+const initialState: TransactionState = {
+  transaction: {} as ITransaction,
+  histories: [],
   hasMore: true,
   loading: false,
   error: null,
-} as any;
+};
 
 export const addTransactionModule = createAsyncThunk(
   "transaction/addTransaction",
-  async (code: string) => {
-    const res = await addTransaction(code);
-    return res.data;
-  }
+  async (request: RequestTransaction): Promise<Response<ITransaction>> =>
+    await addTransaction(request)
 );
 
 export const getHistoryTransactionModule = createAsyncThunk(
   "transaction/getHistoryTransaction",
-  async (request: IHistoryTransaction) => {
-    const res = await getHistoryTransaction(request);
-    console.log(res);
-    
-    return res;
-  }
+  async (request: RequestHistoryTransaction): Promise<ITransaction[]> =>
+    await getHistoryTransaction(request)
 );
 
 export const transactionSlice = createSlice({
@@ -41,29 +38,31 @@ export const transactionSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(addTransactionModule.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(addTransactionModule.fulfilled, (state, action) => {
-      state.loading = false;
-      state.transaction = action.payload;
-    });
-    builder.addCase(addTransactionModule.rejected, (state) => {
-      state.loading = false;
-      state.error = "error";
-    });
-    builder.addCase(getHistoryTransactionModule.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getHistoryTransactionModule.fulfilled, (state, action) => {
-      state.loading = false;
-      state.history = [...state.history, ...action.payload];
-      state.hasMore = action.payload.length > 0;
-    });
-    builder.addCase(getHistoryTransactionModule.rejected, (state) => {
-      state.loading = false;
-      state.error = "error";
-    });
+    builder
+      .addCase(addTransactionModule.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addTransactionModule.fulfilled, (state, action) => {
+        state.loading = false;
+        state.transaction = action.payload.data || ({} as ITransaction);
+      })
+      .addCase(addTransactionModule.rejected, (state) => {
+        state.loading = false;
+        state.error = "error";
+      })
+
+      .addCase(getHistoryTransactionModule.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getHistoryTransactionModule.fulfilled, (state, action) => {
+        state.loading = false;
+        state.histories = [...state.histories, ...action.payload];
+        state.hasMore = action.payload.length > 0;
+      })
+      .addCase(getHistoryTransactionModule.rejected, (state) => {
+        state.loading = false;
+        state.error = "error";
+      });
   },
 });
 

@@ -1,4 +1,4 @@
-import axios from "@/libs/axios";
+import axios from "@global/libs/axios";
 
 import type { RequestAuthentication, Response } from "@global/types";
 

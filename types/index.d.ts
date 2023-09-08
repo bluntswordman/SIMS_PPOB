@@ -12,17 +12,22 @@ export interface IBanner {
 }
 
 export interface IService {
-  service_code: string;
-  service_name: string;
+  service_code?: string;
+  service_name?: string;
   service_icon: string;
   service_tariff: number;
 }
 
-export interface ITransaction extends IService {
+export interface IBalance {
+  balance: number;
+}
+
+export interface ITransaction
+  extends Pick<IService, "service_code" | "service_name"> {
   invoice_number: string;
-  transaction_type: string;
-  description: string;
-  total_amount: number;
+  transaction_type?: string;
+  description?: string;
+  total_amount?: number;
   created_on: string;
 }
 
@@ -46,3 +51,14 @@ export interface RequestUser
   extends Pick<IUser, "email" | "first_name" | "last_name"> {}
 
 export interface RequestUserImage extends Pick<IUser, "profile_image"> {}
+
+export interface RequestBalance {
+  top_up_amount: number;
+}
+
+export interface RequestTransaction extends Pick<IService, "service_code"> {}
+
+export interface RequestHistoryTransaction {
+  offset?: number;
+  limit?: number;
+}

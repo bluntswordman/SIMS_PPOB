@@ -1,27 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { getBalance, addBalance } from "@global/services/balance";
+import { addBalance, getBalance } from "@global/services/balance";
+
+import type { IBalance, RequestBalance, Response } from "@global/types";
+import type { BalanceState } from "@global/types/slice";
 
 const initialState = {
-  data: {},
+  balance: 0,
   loading: false,
   error: null,
-} as any;
+} as BalanceState;
 
 export const getBalanceAccount = createAsyncThunk(
   "balance/getBalance",
-  async () => {
-    const res = await getBalance();
-    return res.data;
-  }
+  async (): Promise<Response<IBalance>> => await getBalance()
 );
 
 export const addBalanceAccount = createAsyncThunk(
   "balance/topup",
-  async (amount: number) => {
-    const res = await addBalance(amount);
-    return res;
-  }
+  async (amount: RequestBalance): Promise<Response<IBalance>> =>
+    await addBalance(amount)
 );
 
 export const balanceSlice = createSlice({
@@ -29,28 +27,29 @@ export const balanceSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getBalanceAccount.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getBalanceAccount.fulfilled, (state, action) => {
-      state.loading = false;
-      state.data = action.payload;
-    });
-    builder.addCase(getBalanceAccount.rejected, (state) => {
-      state.loading = false;
-      state.error = "error";
-    });
-    builder.addCase(addBalanceAccount.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(addBalanceAccount.fulfilled, (state, action) => {
-      state.loading = false;
-      state.data = action.payload;
-    });
-    builder.addCase(addBalanceAccount.rejected, (state) => {
-      state.loading = false;
-      state.error = "error";
-    });
+    builder
+      .addCase(getBalanceAccount.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getBalanceAccount.fulfilled, (state, action) => {
+        state.loading = false;
+        state.balance = action.payload.data?.balance ?? 0;
+      })
+      .addCase(getBalanceAccount.rejected, (state) => {
+        state.loading = false;
+        state.error = "error";
+      })
+      .addCase(addBalanceAccount.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addBalanceAccount.fulfilled, (state, action) => {
+        state.loading = false;
+        state.balance = action.payload.data?.balance ?? 0;
+      })
+      .addCase(addBalanceAccount.rejected, (state) => {
+        state.loading = false;
+        state.error = "error";
+      });
   },
 });
 

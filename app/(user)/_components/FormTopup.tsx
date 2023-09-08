@@ -16,15 +16,12 @@ import {
   addBalanceAccount,
   getBalanceAccount,
 } from "@global/store/features/balanceSlice";
-import type { INotification } from "@global/types/auth";
 
-interface IFormTopup {
-  nominal: number;
-}
+import type { INotification, RequestBalance } from "@global/types";
 
 const NOMINALS = [10000, 20000, 50000, 100000, 250000, 500000];
 
-const FormTopup: FC = () => {
+const FormTopUp: FC = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [notification, setNotification] = useState<INotification | null>({
@@ -36,19 +33,18 @@ const FormTopup: FC = () => {
   const { loading } = useSelector((state: RootState) => state.balance);
   const dispatch = useDispatch<AppDispatch>();
 
-  const [values, handleChange] = useForm<IFormTopup>({
-    nominal: 0,
+  const [values, handleChange] = useForm<RequestBalance>({
+    top_up_amount: 0,
   });
 
   const handleSubmit = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>) => {
-      e.preventDefault();
+    async (event: ChangeEvent<HTMLFormElement>) => {
+      event.preventDefault();
       if (session?.token) {
-        dispatch(addBalanceAccount(values.nominal))
+        dispatch(addBalanceAccount(values))
           .unwrap()
-          .then((res) => {
-            console.log(res);
-            if (res.data === null) {
+          .then((response) => {
+            if (response === null) {
               setNotification({
                 message: "Gagal",
                 type: "error",
@@ -65,7 +61,7 @@ const FormTopup: FC = () => {
           });
       }
     },
-    [dispatch, session?.token, values.nominal]
+    [dispatch, session?.token, values]
   );
 
   return (
@@ -73,18 +69,20 @@ const FormTopup: FC = () => {
       <div className="col-span-3 w-full flex flex-col space-y-5 justify-between h-full">
         <InputGroup
           required
-          name="nominal"
+          name="top_up_amount"
           type="number"
-          id="nominal"
+          id="top_up_amount"
           placeholder="Masukan nominal Top Up"
           leftIcon={<MdOutlinePayment className="w-4 h-4" />}
-          value={values.nominal}
+          value={values.top_up_amount}
           onChange={handleChange}
         />
         <button
           type="button"
           disabled={
-            values.nominal < 10000 || values.nominal > 1000000 || loading
+            values.top_up_amount < 10000 ||
+            values.top_up_amount > 1000000 ||
+            loading
           }
           className="w-full p-2 bg-red-500 text-white font-medium rounded-md transition-all duration-300 hover:bg-red-600 disabled:bg-gray-200"
           onClick={() => setShowForm(true)}
@@ -98,14 +96,14 @@ const FormTopup: FC = () => {
             key={nominal}
             type="button"
             className={`px-2 rounded-md border  transition-all duration-300 cursor-pointer ${
-              values.nominal === nominal
+              values.top_up_amount === nominal
                 ? "border-red-500 text-red-500"
                 : "border-gray-400 hover:border-gray-700 hover:text-gray-700"
             }`}
             onClick={() =>
               handleChange({
                 target: {
-                  name: "nominal",
+                  name: "top_up_amount",
                   value: nominal,
                 },
               } as unknown as ChangeEvent<HTMLInputElement>)
@@ -130,7 +128,9 @@ const FormTopup: FC = () => {
             Top Up sebesar
           </p>
           <h6 className="text-gray-900 text-center font-bold text-2xl">
-            {`Rp.${new Intl.NumberFormat("id-ID").format(values.nominal)}`}
+            {`Rp.${new Intl.NumberFormat("id-ID").format(
+              values.top_up_amount
+            )}`}
           </h6>
           <p className="text-gray-900 text-center font-medium">
             {notification?.message}
@@ -162,7 +162,9 @@ const FormTopup: FC = () => {
             Beli listrik prabayar senilai
           </p>
           <h6 className="text-gray-900 text-center font-bold text-2xl">
-            {`Rp.${new Intl.NumberFormat("id-ID").format(values.nominal)}`}
+            {`Rp.${new Intl.NumberFormat("id-ID").format(
+              values.top_up_amount
+            )}`}
           </h6>
         </div>
         <form onSubmit={handleSubmit}>
@@ -185,4 +187,4 @@ const FormTopup: FC = () => {
   );
 };
 
-export default FormTopup;
+export default FormTopUp;

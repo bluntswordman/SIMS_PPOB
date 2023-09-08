@@ -9,6 +9,7 @@ import type {
 export const getUser = async (): Promise<Response<IUser>> => {
   try {
     const response = await axios.get("/profile");
+
     return response.data;
   } catch (error: any) {
     return error.response.data;

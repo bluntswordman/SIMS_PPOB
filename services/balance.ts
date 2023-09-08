@@ -1,20 +1,25 @@
-import axios from "@/libs/axios";
+import axios from "@global/libs/axios";
+import type { IBalance, RequestBalance, Response } from "@global/types";
 
-export const getBalance = async () => {
+export const getBalance = async (): Promise<Response<IBalance>> => {
   try {
-    const res = await axios.get("/balance");
-    return res.data;
+    const response = await axios.get("/balance");
+
+    return response.data;
   } catch (error: any) {
     return error.response.data;
   }
 };
 
-export const addBalance = async (amount: number) => {
+export const addBalance = async (
+  request: RequestBalance
+): Promise<Response<IBalance>> => {
   try {
-    const res = await axios.post("/topup", {
-      top_up_amount: amount,
+    const response = await axios.post("/topup", {
+      top_up_amount: request.top_up_amount,
     });
-    return res.data;
+
+    return response.data;
   } catch (error: any) {
     return error.response.data;
   }

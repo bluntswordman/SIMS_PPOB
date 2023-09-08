@@ -15,9 +15,7 @@ const Profile = () => {
   const { data: session } = useSession();
   const axios = useAxios();
 
-  const { user, loading } = useSelector(
-    (state: RootState) => state.user
-  );
+  const { user, loading } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
