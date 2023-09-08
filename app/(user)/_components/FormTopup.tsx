@@ -21,7 +21,7 @@ import type { INotification, RequestBalance } from "@global/types";
 
 const NOMINALS = [10000, 20000, 50000, 100000, 250000, 500000];
 
-const FormTopUp: FC = () => {
+const FormTopup: FC = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [notification, setNotification] = useState<INotification | null>({
@@ -187,4 +187,4 @@ const FormTopUp: FC = () => {
   );
 };
 
-export default FormTopUp;
+export default FormTopup;
