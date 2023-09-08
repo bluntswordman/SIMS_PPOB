@@ -1,11 +1,12 @@
 import axios from "@global/libs/axios";
 import type {
-  UserImageRequest,
-  UserRequest,
-  UserResponse,
-} from "@global/types/user";
+  IUser,
+  RequestUser,
+  RequestUserImage,
+  Response,
+} from "@global/types";
 
-export const getUser = async (): Promise<UserResponse> => {
+export const getUser = async (): Promise<Response<IUser>> => {
   try {
     const response = await axios.get("/profile");
     return response.data;
@@ -15,8 +16,8 @@ export const getUser = async (): Promise<UserResponse> => {
 };
 
 export const updateUser = async (
-  request: UserRequest
-): Promise<UserResponse> => {
+  request: RequestUser
+): Promise<Response<IUser>> => {
   try {
     const response = await axios.put("/profile/update", {
       first_name: request.first_name,
@@ -30,13 +31,13 @@ export const updateUser = async (
 };
 
 export const updateUserImage = async (
-  image: UserImageRequest
-): Promise<UserResponse> => {
+  image: RequestUserImage
+): Promise<Response<IUser>> => {
   try {
     const response = await axios.put(
       "/profile/image",
       {
-        file: image.file,
+        file: image.profile_image,
       },
       {
         headers: {

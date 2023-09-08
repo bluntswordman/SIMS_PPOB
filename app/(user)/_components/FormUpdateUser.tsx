@@ -12,8 +12,8 @@ import { FaRegUser } from "react-icons/fa";
 import { FiAtSign } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 
-import { InputGroup } from "@/components/elements";
-import { useForm } from "@/hooks";
+import { InputGroup } from "@global/components/elements";
+import { useForm } from "@global/hooks";
 import { useAxios } from "@global/libs/axios";
 import { AppDispatch, RootState } from "@global/store";
 import {
@@ -21,8 +21,7 @@ import {
   updateUserProfile,
 } from "@global/store/features/userSlice";
 
-import type { INotification } from "@/types/auth";
-import type { UserRequest } from "@/types/user";
+import type { INotification, RequestUser } from "@global/types";
 
 const FormUpdateUser = () => {
   const [update, setUpdate] = useState<boolean>(false);
@@ -35,8 +34,7 @@ const FormUpdateUser = () => {
   const axios = useAxios();
   const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
-
-  const [values, handleChange] = useForm<UserRequest>({
+  const [values, handleChange] = useForm<RequestUser>({
     email: "",
     first_name: "",
     last_name: "",

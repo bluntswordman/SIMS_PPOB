@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { ProfilePhoto } from "@/assets/images";
+import { ProfilePhoto } from "@global/assets/images";
 import { useAxios } from "@global/libs/axios";
 import { IMAGE_FORMAT } from "@global/libs/constant";
 import { AppDispatch, RootState } from "@global/store";
@@ -15,7 +15,7 @@ const Profile = () => {
   const { data: session } = useSession();
   const axios = useAxios();
 
-  const { user, loading, error } = useSelector(
+  const { user, loading } = useSelector(
     (state: RootState) => state.user
   );
   const dispatch = useDispatch<AppDispatch>();

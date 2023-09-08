@@ -11,12 +11,10 @@ import {
 import { FiAtSign } from "react-icons/fi";
 import { MdLockOutline } from "react-icons/md";
 
-import type {
-  AuthRequest,
-  INotification
-} from "@/types/auth";
 import { InputGroup } from "@global/components/elements";
 import { useForm } from "@global/hooks";
+
+import type { INotification, RequestAuthentication } from "@global/types";
 
 const FormLogin = () => {
   const router = useRouter();
@@ -30,7 +28,7 @@ const FormLogin = () => {
     message: "",
   });
 
-  const [values, handleChange] = useForm<AuthRequest>({
+  const [values, handleChange] = useForm<RequestAuthentication>({
     email: "",
     password: "",
   });
@@ -113,7 +111,11 @@ const FormLogin = () => {
       </div>
       <button
         type="submit"
-        disabled={values.email.length < 1 || values.password.length < 1}
+        disabled={
+          (values.email ? values.email.includes("@") : false) ||
+          (values.password ? values.password.length < 8 : false) ||
+          (values.email ? values.email.length < 5 : false)
+        }
         className="btn-solid-primary"
       >
         Masuk
