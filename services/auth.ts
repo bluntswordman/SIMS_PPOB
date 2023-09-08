@@ -1,7 +1,10 @@
 import axios from "@/libs/axios";
-import type { AuthRequest, AuthResponse } from "@/types/auth";
 
-export const register = async (request: AuthRequest): Promise<AuthResponse> => {
+import type { RequestAuthentication, Response } from "@global/types";
+
+export const register = async (
+  request: RequestAuthentication
+): Promise<Response<null>> => {
   try {
     const response = await axios.post("/registration", {
       email: request.email,
@@ -12,6 +15,6 @@ export const register = async (request: AuthRequest): Promise<AuthResponse> => {
 
     return response.data;
   } catch (error: any) {
-    throw new Error(error?.response.data.message);
+    return error.response.data;
   }
 };

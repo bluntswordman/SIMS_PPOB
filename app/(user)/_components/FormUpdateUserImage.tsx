@@ -17,10 +17,12 @@ import {
   updateUserImageProfile,
 } from "@global/store/features/userSlice";
 
-import type { INotification } from "@global/types/auth";
+import type { INotification, RequestUserImage } from "@global/types";
 
 const FormUpdateUserImage = () => {
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<RequestUserImage>({
+    profile_image: null,
+  });
   const [showForm, setShowForm] = useState<boolean>(false);
   const [notification, setNotification] = useState<INotification | null>({
     message: "",
@@ -29,9 +31,7 @@ const FormUpdateUserImage = () => {
 
   const { data: session } = useSession();
   const axios = useAxios();
-  const { user, loading, error } = useSelector(
-    (state: RootState) => state.user
-  );
+  const { user, loading } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const FormUpdateUserImage = () => {
     async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       if (session?.token) {
-        dispatch(updateUserImageProfile({ file: image as File }))
+        dispatch(updateUserImageProfile(image))
           .unwrap()
           .then((response) => {
             if (response.data === null) {
@@ -65,7 +65,9 @@ const FormUpdateUserImage = () => {
               });
             }, 5000);
             dispatch(getUserProfile());
-            setImage(null);
+            setImage({
+              profile_image: null,
+            });
             setShowForm(false);
           });
       }
@@ -103,7 +105,9 @@ const FormUpdateUserImage = () => {
                 onChange={(e) => {
                   if (e.target.files && e.target.files[0]) {
                     if (e.target.files[0].size <= 100 * 1024) {
-                      setImage(e.target.files[0]);
+                      setImage({
+                        profile_image: e.target.files[0],
+                      });
                       setShowForm(true);
                     } else {
                       setNotification({
@@ -152,7 +156,9 @@ const FormUpdateUserImage = () => {
         >
           <div className="w-1/2 h-fit p-5 bg-white rounded-md flex flex-col items-center border relative space-y-10">
             <Image
-              src={image ? URL.createObjectURL(image) : ProfilePhoto}
+              src={
+                image ? URL.createObjectURL(image.profile_image) : ProfilePhoto
+              }
               alt="background saldo"
               width={250}
               height={250}
@@ -173,7 +179,9 @@ const FormUpdateUserImage = () => {
                 type="button"
                 className="btn-outline-primary"
                 onClick={() => {
-                  setImage(null);
+                  setImage({
+                    profile_image: null,
+                  });
                   setShowForm(false);
                 }}
               >

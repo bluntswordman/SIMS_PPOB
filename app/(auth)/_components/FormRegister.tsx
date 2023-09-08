@@ -12,10 +12,11 @@ import { FaRegUser } from "react-icons/fa";
 import { FiAtSign } from "react-icons/fi";
 import { MdLockOutline } from "react-icons/md";
 
-import type { AuthRequest, INotification } from "@/types/auth";
 import { InputGroup } from "@global/components/elements";
 import { useForm } from "@global/hooks";
 import { register } from "@global/services/auth";
+
+import type { INotification, RequestAuthentication } from "@global/types";
 
 const FormRegister: FC = () => {
   const queryClient = useQueryClient();
@@ -31,7 +32,7 @@ const FormRegister: FC = () => {
     message: "",
   });
 
-  const [values, handleChange] = useForm<AuthRequest>({
+  const [values, handleChange] = useForm<RequestAuthentication>({
     email: "",
     first_name: "",
     last_name: "",
@@ -42,12 +43,12 @@ const FormRegister: FC = () => {
   const mutation = useMutation({
     mutationFn: register,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
       setNotification({
         type: "success",
         message: "berhasil registrasi",
       });
       router.push("/login");
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
     onError: (error) => {
       setNotification({
@@ -173,7 +174,7 @@ const FormRegister: FC = () => {
       <button
         type="submit"
         disabled={
-          values.email.length < 1 ||
+          (values.email ? !values.email.includes("@") : true) ||
           (values.last_name ? values.last_name.length < 1 : true) ||
           (values.first_name ? values.first_name.length < 1 : true) ||
           values.password.length < 1 ||
