@@ -1,4 +1,3 @@
-
 import { FormAccount, FormProfileImage } from "@user/_components";
 
 export default function AccountPage() {

@@ -5,18 +5,17 @@ import { FC, useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Loading } from "@/components/vectors";
-import { useAxios } from "@/libs/axios";
-import { getBalanceAccount } from "@/store/features/balanceSlice";
+import { Loading } from "@global/components/vectors";
+import { useAxios } from "@global/libs/axios";
 import { AppDispatch, RootState } from "@global/store";
+import { getBalanceAccount } from "@global/store/features/balanceSlice";
 
-const CheckSaldo: FC = () => {
+const Balance: FC = () => {
   const [showSaldo, setShowSaldo] = useState(false);
 
   const { data: session } = useSession();
   const axios = useAxios();
-
-  const { data, loading } = useSelector((state: RootState) => state.balance);
+  const { balance, loading } = useSelector((state: RootState) => state.balance);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -28,14 +27,14 @@ const CheckSaldo: FC = () => {
   return (
     <div className="absolute p-5 text-white flex flex-col space-y-4 justify-center h-full">
       <h3 className="font-medium z-20">Saldo Anda</h3>
-      {loading || data.balance === undefined ? (
+      {loading || balance === 0 ? (
         <div className="flex justify-start text-start">
           <Loading width={30} height={30} />
         </div>
       ) : (
         <p className="text-2xl font-bold select-none">
           {showSaldo ? (
-            <>{`Rp. ${data.balance.toLocaleString("id-ID")}`}</>
+            <>{`Rp. ${balance.toLocaleString("id-ID")}`}</>
           ) : (
             <>{`Rp. ${"*".repeat(7)}`}</>
           )}
@@ -62,4 +61,4 @@ const CheckSaldo: FC = () => {
   );
 };
 
-export default CheckSaldo;
+export default Balance;

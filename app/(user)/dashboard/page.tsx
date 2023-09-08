@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-import { BackgroundSaldo } from "@/assets/images";
-import { Banner, CheckSaldo, ListService, Profile } from "@user/_components";
+import { BackgroundSaldo } from "@global/assets/images";
+import { Balance, ListBanner, ListService, Profile } from "@user/_components";
 
 export default function DashboardPage() {
   return (
@@ -21,7 +21,7 @@ export default function DashboardPage() {
               priority
               quality={100}
             />
-            <CheckSaldo />
+            <Balance />
           </div>
         </div>
         <div className="grid grid-cols-12 gap-3 w-full my-10">
@@ -32,7 +32,7 @@ export default function DashboardPage() {
         <div className="px-10 container mx-auto ">
           <h2 className="font-bold">Temukan promo menarik</h2>
         </div>
-        <Banner />
+        <ListBanner />
       </div>
     </main>
   );

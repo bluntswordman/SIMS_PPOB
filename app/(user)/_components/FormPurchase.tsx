@@ -17,7 +17,7 @@ import { getBalanceAccount } from "@global/store/features/balanceSlice";
 import { getServicesBySlugModule } from "@global/store/features/moduleSlice";
 import { addTransactionModule } from "@global/store/features/transactionSlice";
 
-import type { INotification } from "@global/types/auth";
+import type { INotification } from "@global/types";
 
 interface FormPurchaseProps {
   slug: string;
@@ -34,11 +34,10 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
   const [values, handleChange] = useForm({
     cash: 0,
   });
-
   const { data: session } = useSession();
   const axios = useAxios();
   const { service, loading } = useSelector((state: RootState) => state.module);
-  const { data: balance } = useSelector((state: RootState) => state.balance);
+  const { balance } = useSelector((state: RootState) => state.balance);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -63,22 +62,26 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       if (session?.token && service) {
-        dispatch(addTransactionModule(service.service_code))
+        dispatch(
+          addTransactionModule({
+            service_code: service.service_code || "",
+          })
+        )
           .unwrap()
-          .then((res) => {
-            if (res.data) {
+          .then((response) => {
+            if (response.data === null) {
+              setShowForm(false);
+              setNotification({
+                message: response.message,
+                type: "error",
+              });
+              setShowNotification(true);
+            } else {
               dispatch(getBalanceAccount());
               setShowForm(false);
               setNotification({
                 message: "Berhasil",
                 type: "success",
-              });
-              setShowNotification(true);
-            } else {
-              setShowForm(false);
-              setNotification({
-                message: res.message,
-                type: "error",
               });
               setShowNotification(true);
             }
@@ -93,10 +96,10 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
       <div className="flex flex-col space-y-1 text-gray-900">
         <h5 className="font-medium">Pembayaran</h5>
         <div className="flex items-center space-x-2">
-          {loading || service?.service_icon === undefined ? (
+          {loading || service.service_icon === undefined ? (
             <>
-              <div className="w-10 h-10 rounded-lg bg-gray-200 animate-pulse animate-infinite animate-duration-[800ms] animate-delay-[10ms] animate-ease-in-out animate-normal animate-fill-both"></div>
-              <div className="w-52 h-8 rounded-lg bg-gray-200 animate-pulse animate-infinite animate-duration-[800ms] animate-delay-[10ms] animate-ease-in-out animate-normal animate-fill-both"></div>
+              <div className="w-10 h-10 rounded-lg loading-animate"></div>
+              <div className="w-52 h-8 rounded-lg loading-animate"></div>
             </>
           ) : (
             <>
@@ -130,9 +133,7 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
         />
         <button
           type="button"
-          disabled={
-            loading || values.cash === 0 || balance.balance < values.cash
-          }
+          disabled={loading || values.cash === 0 || balance < values.cash}
           onClick={() => setShowForm(true)}
           className="btn-solid-primary"
         >
@@ -151,7 +152,7 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
         )}
         <div className="flex flex-col">
           <p className="text-gray-900 text-center font-medium">
-            {`Pembayaran ${service?.service_name} sebesar`}
+            {`Pembayaran ${service.service_name} sebesar`}
           </p>
           <h6 className="text-gray-900 text-center font-bold text-2xl">
             {`Rp.${new Intl.NumberFormat("id-ID").format(values.cash)}`}
@@ -183,7 +184,7 @@ const FormPurchase: FC<FormPurchaseProps> = ({ slug }) => {
         />
         <div className="flex flex-col">
           <p className="text-gray-900 text-center font-medium">
-            {`Bayar ${service?.service_name} sebesar`}
+            {`Bayar ${service.service_name} sebesar`}
           </p>
           <h6 className="text-gray-900 text-center font-bold text-2xl">
             {`Rp.${new Intl.NumberFormat("id-ID").format(values.cash)}`}

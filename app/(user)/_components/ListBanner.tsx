@@ -7,16 +7,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { useAxios } from "@/libs/axios";
-import { getBannersModule } from "@/store/features/moduleSlice";
-import type { IBanner } from "@/types/module";
+import { useAxios } from "@global/libs/axios";
 import { AppDispatch, RootState } from "@global/store";
+import { getBannersModule } from "@global/store/features/moduleSlice";
+
+import type { IBanner } from "@global/types";
 
 import "@user/swiper.css";
 import "swiper/css";
 import "swiper/css/pagination";
 
-const Banner: FC = () => {
+const ListBanner: FC = () => {
   const { data: session } = useSession();
   const axios = useAxios();
   const { banners, loading } = useSelector((state: RootState) => state.module);
@@ -65,4 +66,4 @@ const Banner: FC = () => {
   );
 };
 
-export default Banner;
+export default ListBanner;

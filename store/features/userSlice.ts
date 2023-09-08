@@ -1,18 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { getUser, updateUser, updateUserImage } from "@global/services/user";
+
 import type {
   IUser,
   RequestUser,
   RequestUserImage,
   Response,
 } from "@global/types";
-
-interface UserState {
-  user: Response<IUser>;
-  loading: boolean;
-  error: string | null;
-}
+import type { UserState } from "@global/types/slice";
 
 const initialState = {
   user: {},
@@ -22,26 +18,19 @@ const initialState = {
 
 export const getUserProfile = createAsyncThunk(
   "user/getProfile",
-  async (): Promise<Response<IUser>> => {
-    const response = await getUser();
-    return response;
-  }
+  async (): Promise<Response<IUser>> => await getUser()
 );
 
 export const updateUserProfile = createAsyncThunk(
   "user/updateProfile",
-  async (request: RequestUser): Promise<Response<IUser>> => {
-    const response = await updateUser(request);
-    return response;
-  }
+  async (request: RequestUser): Promise<Response<IUser>> =>
+    await updateUser(request)
 );
 
 export const updateUserImageProfile = createAsyncThunk(
   "user/updateProfileImage",
-  async (request: RequestUserImage): Promise<Response<IUser>> => {
-    const response = await updateUserImage(request);
-    return response;
-  }
+  async (request: RequestUserImage): Promise<Response<IUser>> =>
+    await updateUserImage(request)
 );
 
 export const userSlice = createSlice({

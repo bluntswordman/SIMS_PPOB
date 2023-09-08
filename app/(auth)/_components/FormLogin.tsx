@@ -112,7 +112,6 @@ const FormLogin = () => {
       <button
         type="submit"
         disabled={
-          (values.email ? values.email.includes("@") : false) ||
           (values.password ? values.password.length < 8 : false) ||
           (values.email ? values.email.length < 5 : false)
         }

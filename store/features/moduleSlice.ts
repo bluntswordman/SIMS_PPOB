@@ -2,42 +2,34 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import {
   getBanners,
+  getServiceBySlug,
   getServices,
-  getServicesBySlug,
 } from "@global/services/module";
 
-const initialState = {
+import type { IBanner, IService, Response } from "@global/types";
+import type { ModuleState } from "@global/types/slice";
+
+const initialState: ModuleState = {
   banners: [],
   services: [],
-  service: {},
+  service: {} as IService,
   loading: false,
   error: null,
-} as any;
+};
 
 export const getBannersModule = createAsyncThunk(
   "module/getBanners",
-  async () => {
-    const res = await getBanners();
-    return res.data;
-  }
+  async (): Promise<Response<IBanner[]>> => await getBanners()
 );
 
 export const getServicesModule = createAsyncThunk(
   "module/getServices",
-  async () => {
-    const res = await getServices();
-    console.log(res);
-
-    return res.data;
-  }
+  async (): Promise<Response<IService[]>> => await getServices()
 );
 
 export const getServicesBySlugModule = createAsyncThunk(
   "module/getServicesBySlug",
-  async (slug: string) => {
-    const res = await getServicesBySlug(slug);
-    return res;
-  }
+  async (slug: string): Promise<IService | null> => await getServiceBySlug(slug)
 );
 
 export const moduleSlice = createSlice({
@@ -45,39 +37,42 @@ export const moduleSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getBannersModule.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getBannersModule.fulfilled, (state, action) => {
-      state.loading = false;
-      state.banners = action.payload;
-    });
-    builder.addCase(getBannersModule.rejected, (state) => {
-      state.loading = false;
-      state.error = "error";
-    });
-    builder.addCase(getServicesModule.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getServicesModule.fulfilled, (state, action) => {
-      state.loading = false;
-      state.services = action.payload;
-    });
-    builder.addCase(getServicesModule.rejected, (state) => {
-      state.loading = false;
-      state.error = "error";
-    });
-    builder.addCase(getServicesBySlugModule.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getServicesBySlugModule.fulfilled, (state, action) => {
-      state.loading = false;
-      state.service = action.payload;
-    });
-    builder.addCase(getServicesBySlugModule.rejected, (state) => {
-      state.loading = false;
-      state.error = "error";
-    });
+    builder
+      .addCase(getBannersModule.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getBannersModule.fulfilled, (state, action) => {
+        state.loading = false;
+        state.banners = action.payload.data || [];
+      })
+      .addCase(getBannersModule.rejected, (state) => {
+        state.loading = false;
+        state.error = "error";
+      })
+
+      .addCase(getServicesModule.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getServicesModule.fulfilled, (state, action) => {
+        state.loading = false;
+        state.services = action.payload.data || [];
+      })
+      .addCase(getServicesModule.rejected, (state) => {
+        state.loading = false;
+        state.error = "error";
+      })
+
+      .addCase(getServicesBySlugModule.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getServicesBySlugModule.fulfilled, (state, action) => {
+        state.loading = false;
+        state.service = action.payload || ({} as IService);
+      })
+      .addCase(getServicesBySlugModule.rejected, (state) => {
+        state.loading = false;
+        state.error = "error";
+      });
   },
 });
 

@@ -153,9 +153,18 @@ const FormUpdateUser = () => {
           />
         </div>
         {update ? (
-          <button type="submit" className="btn-solid-primary">
-            Simpan
-          </button>
+          <>
+            <button type="submit" className="btn-solid-primary">
+              Simpan
+            </button>
+            <button
+              type="button"
+              className="btn-outline-primary"
+              onClick={() => setUpdate(false)}
+            >
+              Batal
+            </button>
+          </>
         ) : (
           <div className="flex flex-col space-y-5">
             <button

@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import { BackgroundSaldo } from "@global/assets/images";
-import { CheckSaldo, FormTopup, Profile } from "@user/_components";
+import { Balance, FormTopUp, Profile } from "@user/_components";
 
 export default function TopupPage() {
   return (
@@ -21,14 +21,14 @@ export default function TopupPage() {
               priority
               quality={100}
             />
-            <CheckSaldo />
+            <Balance />
           </div>
         </div>
         <div className="flex flex-col space-y-1 text-gray-900">
           <h5 className="font-medium">Silahkan Masukan</h5>
           <h3 className="font-bold text-3xl">Nominal Top Up</h3>
         </div>
-        <FormTopup />
+        <FormTopUp />
       </div>
     </main>
   );

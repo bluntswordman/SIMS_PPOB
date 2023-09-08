@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC } from "react";
 
-import { Logo } from "@/assets/icons";
+import { Logo } from "@global/assets/icons";
 
 const Header: FC = () => {
   const pathname = usePathname();

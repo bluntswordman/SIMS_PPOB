@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import {
-  QueryProvider,
-  SessionProvider
-} from "@global/components/fragments";
+import { QueryProvider, SessionProvider } from "@global/components/fragments";
 
 import "@auth/style.css";
 import "@global/styles/globals.css";

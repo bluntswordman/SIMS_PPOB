@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import { Header } from "@user/_components";
 import {
-  SessionProvider,
   QueryProvider,
   ReduxProvider,
+  SessionProvider,
 } from "@global/components/fragments";
+import { Header } from "@user/_components";
 
 import "@global/styles/globals.css";
 
