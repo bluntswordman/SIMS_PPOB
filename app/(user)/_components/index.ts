@@ -1,6 +1,6 @@
 export { default as Balance } from "./Balance";
 export { default as FormPurchase } from "./FormPurchase";
-export { default as FormTopUp } from "./FormTopUp";
+export { default as FormTopUp } from "./FormTopup";
 export { default as FormAccount } from "./FormUpdateUser";
 export { default as FormProfileImage } from "./FormUpdateUserImage";
 export { default as Header } from "./Header";
